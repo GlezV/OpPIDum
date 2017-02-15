@@ -59,11 +59,37 @@ namespace OpPIDum.Helpers.RungeKutta
                 }
 
                 OutValue = AperiodicElements[AperiodicElements.Count - 1].CurrentValue;
-                AperiodicElements[0].PreviousValue = OutValue;
-
+                
                 chart.Add(t, OutValue);
             }
 
+
+        }
+
+        public void CalculationStep(double tt, double tdt, out double resT, out double resY)
+        {
+            AperiodicElements[0].PreviousValue = inValue;
+
+            for (int i = 0; i < AperiodicElements.Count; i++) //TODO or foreach and ref
+            {
+                var res = StepCalculationAperiodicElement(
+                    AperiodicElements[i].PreviousValue,
+                    AperiodicElements[i].CurrentValue,
+                    tt,
+                    tdt,
+                    AperiodicElements[i].T,
+                    AperiodicElements[i].K
+                );
+                AperiodicElements[i].CurrentValue = res;
+
+                if (i < AperiodicElements.Count - 1)
+                    AperiodicElements[i + 1].PreviousValue = res;
+            }
+
+            OutValue = AperiodicElements[AperiodicElements.Count - 1].CurrentValue;
+
+            resT = tt + tdt;
+            resY = OutValue;
 
         }
 
@@ -98,6 +124,12 @@ namespace OpPIDum.Helpers.RungeKutta
         public double PreviousValue { get; set; }
         public double CurrentValue { get; set; }
 
+    }
+
+    public class chartPoint
+    {
+        public double T { get; set; }
+        public double V { get; set; }
     }
     
 }
