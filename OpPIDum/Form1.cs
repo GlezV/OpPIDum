@@ -44,7 +44,7 @@ namespace OpPIDum
                     PreviousValue = 0,
                 }
                 );
-
+            //TODO sdsd
             objectControl.dt = Convert.ToDouble(textBox7.Text);
             objectControl.MaxTimePeriod = Convert.ToDouble(textBox8.Text);
             objectControl.inValue = Convert.ToDouble(textBox10.Text);
