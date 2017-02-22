@@ -36,8 +36,8 @@ namespace OpPIDum.Helpers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="adr"></param>          //Адрес устройства
-        /// <param name="adr_type"></param>     //Длина адреса  0 - 8 бит 1 - 11 бит
+        /// <param name="adr">Адрес устройства</param>          //Адрес устройства
+        /// <param name="adr_type">Длина адреса  0 - 8 бит 1 - 11 бит</param>     //Длина адреса  0 - 8 бит 1 - 11 бит
         /// <param name="command"></param>      //Команда
         /// <param name="value"></param>        //Записываемое значение
         /// <param name="index"></param>        //Индекс

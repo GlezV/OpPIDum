@@ -11,6 +11,7 @@ namespace OpPIDum
     {
         public Form1()
         {
+            Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime; // повышение приоритета процесса
             InitializeComponent();
         }
 
@@ -98,6 +99,8 @@ namespace OpPIDum
             objectControl.MaxTimePeriod = Convert.ToDouble(textBox8.Text);
             objectControl.inValue = Convert.ToDouble(textBox10.Text);
 
+            
+
             backgroundWorker1.RunWorkerAsync(objectControl);
             
         }
@@ -109,6 +112,9 @@ namespace OpPIDum
 
         private void backgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
+            
+            Thread.CurrentThread.Priority = ThreadPriority.Highest; // повышение приоритета потока
+
             var myControl = e.Argument as ObbjectRegulation;
 
             double TimeCurrent = 0;
@@ -116,26 +122,25 @@ namespace OpPIDum
 
             //настройка для расчета dt
             Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
+            
             while (!backgroundWorker1.CancellationPending)
             {
-                var sl = 100;
-                Thread.Sleep(sl); //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! S_L_E_E_P
-
-                var ms = (double)stopwatch.ElapsedMilliseconds / 1000;
-
+                //var ms = (double)stopwatch.ElapsedMilliseconds / 1000;
+                var ms = 1000; //ms 
+                stopwatch.Start();
                 myControl.CalculationStep(
                     TimeCurrent,
-                    ms,
+                    ms/1000,
                     out TimeCurrent,
                     out ValCurrent
                 );
+                stopwatch.Stop();
+                var sleep = ms - (int)stopwatch.ElapsedMilliseconds;
+                Thread.Sleep(sleep);
+
 
                 backgroundWorker1.ReportProgress(0, new chartPoint() { T = TimeCurrent, V = ValCurrent });
 
-                stopwatch.Reset();
-                stopwatch.Start();
 
             }
         }
